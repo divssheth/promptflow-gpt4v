@@ -1,0 +1,46 @@
+id: template_chat_flow
+name: Template Chat Flow
+environment:
+  python_requirements_txt: requirements.txt
+inputs:
+  chat_history:
+    type: list
+    default: []
+    is_chat_input: false
+    is_chat_history: true
+  question:
+    type: string
+    default: summary
+    is_chat_input: true
+  video_sas_url:
+    type: string
+    default: ""
+    is_chat_input: false
+  video_index_name:
+    type: string
+    default: microsoft-advertisements
+    is_chat_input: false
+  video_id:
+    type: string
+    default: videoiddiv1
+    is_chat_input: false
+outputs:
+  answer:
+    type: string
+    reference: ${question_gpt4v.output}
+    is_chat_output: true
+nodes:
+- name: question_gpt4v
+  type: python
+  source:
+    type: code
+    path: question_gpt4v.py
+  inputs:
+    VIDEO_FILE_SAS_URL: ${inputs.video_sas_url}
+    VIDEO_INDEX_NAME: ${inputs.video_index_name}
+    chat_history: ${inputs.chat_history}
+    conn: CREDENTIALS
+    document_id: ${inputs.video_id}
+    question: ${inputs.question}
+    is_video_indexed: ${create_video_index.output}
+  use_variants: false

@@ -1,0 +1,4 @@
+bs4
+promptflow[azure]
+promptflow-tools
+promptflow[executable]
